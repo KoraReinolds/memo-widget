@@ -11,6 +11,15 @@
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
     <div>Counter: {{ store.count }}</div>
+    <div>
+      <slot></slot>
+    </div>
+    <div>
+      <slot name="first"></slot>
+    </div>
+    <div>
+      <slot name="second">second</slot>
+    </div>
     <button @click="store.increment">increment</button>
   </div>
 </template>

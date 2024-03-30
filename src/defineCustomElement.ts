@@ -11,8 +11,7 @@ export const defineCustomElement = (
   { plugins = [] }: any = {},
 ) =>
   VueDefineCustomElement({
-    render: () => h(component),
-    setup() {
+    setup(props, { slots }) {
       const app = createApp({})
 
       plugins.forEach(app.use)
@@ -25,5 +24,17 @@ export const defineCustomElement = (
 
       Object.assign(inst.appContext, app._context)
       Object.assign(inst.provides, app._context.provides)
+
+      return () =>
+        h(
+          component,
+          {
+            ...props,
+            ...slots,
+          },
+          {
+            default: () => h('slot'),
+          },
+        )
     },
   })
