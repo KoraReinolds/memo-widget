@@ -3,6 +3,7 @@ import {
   h,
   createApp,
   getCurrentInstance,
+  type ComponentInternalInstance,
 } from 'vue'
 
 export const defineCustomElement = (
@@ -16,7 +17,9 @@ export const defineCustomElement = (
 
       plugins.forEach(app.use)
 
-      const inst = getCurrentInstance()
+      const inst = getCurrentInstance() as ComponentInternalInstance & {
+        provides: any
+      }
 
       if (!inst) return
 
