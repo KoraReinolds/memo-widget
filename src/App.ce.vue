@@ -1,10 +1,17 @@
 <script setup lang="ts">
   import { useCounterStore } from './stores/counter'
 
-  defineProps<{
-    msg: string
-  }>()
+  defineProps<{ msg: string }>()
+
+  const emits = defineEmits<{ count: [number] }>()
+
   const store = useCounterStore()
+
+  const increment = () => {
+    store.increment()
+    console.log(store.count)
+    emits('count', store.count)
+  }
 </script>
 
 <template>
@@ -14,37 +21,6 @@
     <div>
       <slot></slot>
     </div>
-    <div>
-      <slot name="first"></slot>
-    </div>
-    <div>
-      <slot name="second">second</slot>
-    </div>
-    <button @click="store.increment">increment</button>
+    <button @click="increment">increment</button>
   </div>
 </template>
-
-<style scoped>
-  h1 {
-    font-weight: 500;
-    font-size: 2.6rem;
-    position: relative;
-    top: -10px;
-  }
-
-  h3 {
-    font-size: 1.2rem;
-  }
-
-  .greetings h1,
-  .greetings h3 {
-    text-align: center;
-  }
-
-  @media (min-width: 1024px) {
-    .greetings h1,
-    .greetings h3 {
-      text-align: left;
-    }
-  }
-</style>

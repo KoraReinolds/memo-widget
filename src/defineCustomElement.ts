@@ -11,7 +11,11 @@ export const defineCustomElement = (
   { plugins = [] }: any = {},
 ) =>
   VueDefineCustomElement({
-    setup(props, { slots }) {
+    styles: component.styles,
+    props: component.props,
+    emits: component.emits,
+
+    setup(props, { emit }) {
       const app = createApp({})
 
       plugins.forEach(app.use)
@@ -19,6 +23,15 @@ export const defineCustomElement = (
       const inst = getCurrentInstance() as ComponentInternalInstance & {
         provides: any
       }
+
+      const events = Object.fromEntries(
+        (component.emits || []).map((event: string) => {
+          return [
+            `on${event[0].toUpperCase()}${event.slice(1)}`,
+            (payload: unknown) => emit(event, payload),
+          ]
+        }),
+      )
 
       if (!inst) return
 
@@ -28,10 +41,7 @@ export const defineCustomElement = (
       return () =>
         h(
           component,
-          {
-            ...props,
-            ...slots,
-          },
+          { ...props, ...events },
           {
             default: () => h('slot'),
           },
