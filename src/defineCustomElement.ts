@@ -5,17 +5,18 @@ import {
   getCurrentInstance,
   type ComponentInternalInstance,
 } from 'vue'
+import WebComponentSlot from './components/WebComponentSlot.vue'
 
 export const defineCustomElement = (
   component: any,
-  { plugins = [] }: any = {},
+  { plugins = [], slots = [] }: { plugins?: any; slots?: string[] } = {},
 ) =>
   VueDefineCustomElement({
     styles: component.styles,
     props: component.props,
     emits: component.emits,
 
-    setup(props, { emit }) {
+    setup: (props, { emit }) => {
       const app = createApp({})
 
       plugins.forEach(app.use)
@@ -38,13 +39,21 @@ export const defineCustomElement = (
       Object.assign(inst.appContext, app._context)
       Object.assign(inst.provides, app._context.provides)
 
-      return () =>
-        h(
+      return () => {
+        return h(
           component,
           { ...props, ...events },
-          {
-            default: () => h('slot'),
-          },
+          Object.fromEntries(
+            slots.map((slotName) => [
+              slotName,
+              (props: Object) =>
+                h(WebComponentSlot, {
+                  ...props,
+                  name: slotName === 'default' ? undefined : slotName,
+                }),
+            ]),
+          ),
         )
+      }
     },
   })
