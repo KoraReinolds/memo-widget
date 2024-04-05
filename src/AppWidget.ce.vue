@@ -1,26 +1,19 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useCounterStore } from './stores/counter'
+  import type { IMemoItem } from './types/items'
+  import type { IMemoConfig } from './types/memo'
 
-  defineProps<{ msg: string }>()
-
-  const emits = defineEmits<{ count: [number] }>()
-
-  const store = useCounterStore()
-
-  const increment = () => {
-    store.increment()
-    emits('count', store.count)
-  }
+  defineProps<{
+    items: IMemoItem[]
+    links: Record<string, number[]>
+    config: IMemoConfig
+  }>()
 </script>
 
 <template>
   <div>
-    <h1>{{ msg }}</h1>
-    <div>Counter: {{ store.count }}</div>
-    <div>
-      <slot :value="store.count"></slot>
-    </div>
-    <button @click="increment">increment</button>
+    <div>items: {{ items }}</div>
+    <div>links: {{ links }}</div>
+    <div>config: {{ config }}</div>
+    <slot></slot>
   </div>
 </template>

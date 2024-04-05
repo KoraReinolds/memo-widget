@@ -15,6 +15,7 @@ export default defineConfig({
     port: 3001,
   },
   build: {
+    minify: false,
     lib: {
       entry: './src/main.ts',
       formats: ['es'], // pure ESM package
