@@ -1,22 +1,22 @@
 import type { IMemoItem } from './items'
 
-interface IAssociationSettings {
-  listId: number
+interface IMemoAssociationSettings {
+  listId: string
   count: number
 }
 
-export interface ICountRange {
+export interface IMemoCountRange {
   min: number
   max: number
 }
 
-interface ISuggestionSettings {
-  listId: number
-  count: number | ICountRange
+interface IMemoSuggestionSettings {
+  listId: string
+  count: number | IMemoCountRange
   totalCount: number
 }
 
-export interface IKeyboardKey {
+export interface IMemoKeyboardKey {
   code: string
   altKey: boolean
   shiftKey: boolean
@@ -25,13 +25,16 @@ export interface IKeyboardKey {
 
 export interface IInputData {
   items: IMemoItem[]
-  keys: IKeyboardKey[]
+  keys: IMemoKeyboardKey[]
 }
 
-export type Validator = (inputData: IInputData, result: IMemoItem[]) => boolean
+export type MemoValidator = (
+  inputData: IInputData,
+  result: IMemoItem[],
+) => boolean
 
 export interface IMemoConfig {
-  associations: IAssociationSettings
-  suggestions: ISuggestionSettings
-  validator?: Validator
+  associations: IMemoAssociationSettings
+  suggestions: IMemoSuggestionSettings
+  validator?: MemoValidator
 }
