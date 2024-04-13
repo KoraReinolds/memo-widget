@@ -76,7 +76,12 @@
     config: Partial<IMemoConfig>
   }>()
 
-  const { config } = useMemoConfig(props.config)
+  const { config, updateConfig } = useMemoConfig(props.config)
+
+  watch(
+    () => props.config,
+    (newConfig) => (config.value = updateConfig(config.value, newConfig)),
+  )
 
   const isNumber = (num: any): num is number => num && Number.isInteger(+num)
 
@@ -84,7 +89,7 @@
     Math.round(Math.random() * (range.max - range.min) + range.min)
 
   const suggestionCountRange = computed<IMemoCountRange>(() => {
-    const count = config.suggestions.count
+    const count = config.value.suggestions.count
     return isNumber(count)
       ? {
           min: count,
@@ -99,14 +104,14 @@
   const defaultValidator: MemoValidator = ({ items }, result) =>
     toString(items) === toString(result)
 
-  const validate = config.validator || defaultValidator
+  const validate = config.value.validator || defaultValidator
 
   const toIdMap = <T extends { id: string }>(arr: T[]): Record<string, T> =>
     indexBy(prop('id'), arr)
 
-  const associationMap = computed(() => toIdMap(config.associations.data))
+  const associationMap = computed(() => toIdMap(config.value.associations.data))
 
-  const suggestionMap = computed(() => toIdMap(config.suggestions.data))
+  const suggestionMap = computed(() => toIdMap(config.value.suggestions.data))
 
   const getSuggestionById = (id: string) => suggestionMap.value[id]
 
@@ -135,7 +140,7 @@
   const reloadAssociations = () =>
     (associationItems.value = allAssociationItems.value
       .sort(randomSort)
-      .splice(0, config.associations.count))
+      .splice(0, config.value.associations.count))
 
   const suggestionItems = computed(() => Object.values(suggestionMap.value))
 
@@ -203,7 +208,7 @@
         .map((id) => suggestionMap.value[id] || associationMap.value[id])),
         rightResult.value.forEach((item) => suggestions.value?.push(item))
 
-      const extraLinks = config.suggestions.totalCount - rightLinks
+      const extraLinks = config.value.suggestions.totalCount - rightLinks
       suggestionItems.value
         .filter((item) => !associatedLinks.includes(item.id))
         .sort(randomSort)

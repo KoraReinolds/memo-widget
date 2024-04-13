@@ -6,6 +6,7 @@
   ],
   "main": "./dist/memo-widget.umd.cjs",
   "module": "./dist/memo-widget.js",
+  "types": "./dist/main.d.ts",
   "exports": {
     ".": {
       "import": "./dist/memo-widget.js",
