@@ -1,7 +1,7 @@
 import type { IMemoItem } from './items'
 
 interface IMemoAssociationSettings {
-  listId: string
+  data: IMemoItem[]
   count: number
 }
 
@@ -11,7 +11,7 @@ export interface IMemoCountRange {
 }
 
 interface IMemoSuggestionSettings {
-  listId: string
+  data: IMemoItem[]
   count: number | IMemoCountRange
   totalCount: number
 }
