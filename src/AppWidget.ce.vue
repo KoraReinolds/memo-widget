@@ -90,9 +90,13 @@
   const suggestionItems = computed(() => Object.values(suggestionMap.value))
 
   const index = ref(-1)
+
+  const isMemoStarted = computed(() => index.value === -1)
+
   const association = computed<IMemoItem | null>(
     () => associationItems.value[index.value],
   )
+
   const suggestions = ref<IMemoItem[]>([])
   const selectedSuggestions = ref<SelectedItemUI>({})
   const selectedItems = computed<IMemoItem[]>(() =>
@@ -185,13 +189,10 @@
       v-for="item in suggestions"
       :key="item.id"
     >
-      <label :for="`memo-${item.id}`">
-        <input
-          type="text"
-          v-model="item.data"
-          readonly
-        />
-      </label>
+      <label
+        :for="`memo-${item.id}`"
+        v-text="item.data"
+      />
       <input
         :id="`memo-${item.id}`"
         v-model="selectedSuggestions[item.id]"
@@ -199,22 +200,35 @@
       />
     </div>
 
-    <button
+    <slot
+      name="button_start"
       @click="start"
-      v-text="'Start'"
-    />
-    <button
+    >
+      <button v-text="'Start'" />
+    </slot>
+
+    <slot
+      name="button_next"
       @click="next"
-      v-text="'Next'"
-    />
-    <button
+    >
+      <button v-text="'Next'" />
+    </slot>
+
+    <slot
+      name="button_reload"
       @click="reload"
-      v-text="'Reload'"
-    />
+    >
+      <button v-text="'Reload'" />
+    </slot>
 
     <div>associationItems: {{ associationItems.length }}</div>
     <div>suggestionItems: {{ suggestionItems.length }}</div>
-    <div>pressedKeys: {{ pressedKeys }}</div>
+    <div v-if="!isMemoStarted">
+      <span v-text="'pressedKeys'" />
+      <div v-for="key in pressedKeys.slice(-5)">
+        {{ key }}
+      </div>
+    </div>
     <slot></slot>
   </div>
 </template>

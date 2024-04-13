@@ -8,7 +8,7 @@ import type { IMemoConfig } from './types/memo'
 
 const Widget = defineCustomElement(App, {
   plugins: [createPinia()],
-  slots: ['default'],
+  slots: ['default', 'button_start', 'button_next', 'button_reload'],
 })
 
 export type { IMemoItem, IMemoConfig }
