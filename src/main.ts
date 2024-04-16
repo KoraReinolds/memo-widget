@@ -6,11 +6,12 @@ import { defineCustomElement } from './defineCustomElement'
 import type { IMemoItem } from './types/items'
 import type { IMemoConfig } from './types/memo'
 
-const Widget = defineCustomElement(App, {
-  plugins: [createPinia()],
-  slots: ['default', 'button_start', 'button_next', 'button_reload'],
-})
+const init = (slots: string[]) =>
+  defineCustomElement(App, {
+    plugins: [createPinia()],
+    slots,
+  })
 
 export type { IMemoItem, IMemoConfig }
 
-export { Widget }
+export { init }

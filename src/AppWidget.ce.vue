@@ -1,6 +1,9 @@
 <template>
   <div>
-    <slot name="config">
+    <slot
+      name="config"
+      :config
+    >
       <MemoConfig :config />
     </slot>
 
