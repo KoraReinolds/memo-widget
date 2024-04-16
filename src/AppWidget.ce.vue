@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div>{{ config }}</div>
+    <slot name="config">
+      <MemoConfig :config />
+    </slot>
+
     <div class="flex flex-col">
       <div v-text="selectedSuggestions" />
       <div v-text="association?.data" />
@@ -61,6 +64,7 @@
 <script setup lang="ts">
   import { computed, ref, watch } from 'vue'
   import type { IMemoItem } from './types/items'
+  import MemoConfig from './components/MemoConfig.vue'
   import { indexBy, prop } from 'ramda'
   import type {
     IMemoConfig,
